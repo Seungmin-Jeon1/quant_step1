@@ -1,0 +1,11 @@
+__pycache__/
+*.py[cod]
+.venv/
+screening/.yf_cache/
+screening/output/*.csv
+screening/output/*.xlsx
+backtesting/.yf_cache/
+backtesting/output/*.csv
+backtesting/output/*.xlsx
+output/*.csv
+output/*.xlsx

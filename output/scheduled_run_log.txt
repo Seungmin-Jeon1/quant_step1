@@ -1,0 +1,127 @@
+==== 2026-05-15  2:05:54.83 ==== 
+Starting quant_step1 daily report pipeline.
+This is a research workflow only. It does not place trades.
+
+=== Current screener ===
+^C==== 2026-05-15  2:06:05.30 ==== 
+Screening LUNR...
+Screening RKLB...
+Screening ASTS...
+Screening PL...
+Screening SPCE...
+Screening ACHR...
+Screening JOBY...
+Screening NVDA...
+Screening TSLA...
+Screening GOOG...
+Screening AAPL...
+Wrote C:\Users\SAMSUNG\Documents\Codex\2026-04-27\create-a-python-project-called-quant\quant_step1\screening\output\growth_rebound_screen.csv
+Wrote C:\Users\SAMSUNG\Documents\Codex\2026-04-27\create-a-python-project-called-quant\quant_step1\screening\output\mega_cap_valuation_screen.csv
+Wrote C:\Users\SAMSUNG\Documents\Codex\2026-04-27\create-a-python-project-called-quant\quant_step1\screening\output\growth_rebound_screen.xlsx
+Wrote C:\Users\SAMSUNG\Documents\Codex\2026-04-27\create-a-python-project-called-quant\quant_step1\screening\output\mega_cap_valuation_screen.xlsx
+Wrote C:\Users\SAMSUNG\Documents\Codex\2026-04-27\create-a-python-project-called-quant\quant_step1\screening\output\quant_step1_report.xlsx
+Done. Results are screening indicators only, not price predictions.
+Backtesting LUNR...
+Backtesting RKLB...
+Backtesting ASTS...
+Backtesting PL...
+Backtesting SPCE...
+Backtesting ACHR...
+Backtesting JOBY...
+Wrote C:\Users\SAMSUNG\Documents\Codex\2026-04-27\create-a-python-project-called-quant\quant_step1\backtesting\output\growth_signal_backtest_trades.csv
+Wrote C:\Users\SAMSUNG\Documents\Codex\2026-04-27\create-a-python-project-called-quant\quant_step1\backtesting\output\growth_signal_backtest_summary.csv
+Wrote C:\Users\SAMSUNG\Documents\Codex\2026-04-27\create-a-python-project-called-quant\quant_step1\backtesting\output\growth_signal_backtest_by_ticker.csv
+Wrote C:\Users\SAMSUNG\Documents\Codex\2026-04-27\create-a-python-project-called-quant\quant_step1\backtesting\output\growth_signal_backtest_trades.xlsx
+Wrote C:\Users\SAMSUNG\Documents\Codex\2026-04-27\create-a-python-project-called-quant\quant_step1\backtesting\output\growth_signal_backtest_summary.xlsx
+Wrote C:\Users\SAMSUNG\Documents\Codex\2026-04-27\create-a-python-project-called-quant\quant_step1\backtesting\output\growth_signal_backtest_by_ticker.xlsx
+Wrote C:\Users\SAMSUNG\Documents\Codex\2026-04-27\create-a-python-project-called-quant\quant_step1\backtesting\output\growth_signal_backtest_report.xlsx
+Total signal events: 255
+Event counts by signal:
+- Early Watch: 15
+- High Volume Risk Monitor: 18
+- Pullback Watch: 58
+- Trend Positive: 96
+- Weak Trend / Low Volume: 68
+Insufficient future data counts:
+- return_5d: 5
+- return_20d: 15
+- return_60d: 48
+yfinance errors: none
+Done. Backtest results are historical research only, not predictions.
+Wrote C:\Users\SAMSUNG\Documents\Codex\2026-04-27\create-a-python-project-called-quant\quant_step1\backtesting\output\growth_signal_backtest_interpretation.csv
+Wrote C:\Users\SAMSUNG\Documents\Codex\2026-04-27\create-a-python-project-called-quant\quant_step1\backtesting\output\growth_signal_backtest_interpretation.xlsx
+Wrote C:\Users\SAMSUNG\Documents\Codex\2026-04-27\create-a-python-project-called-quant\quant_step1\backtesting\output\growth_signal_backtest_scorecard.xlsx
+Wrote C:\Users\SAMSUNG\Documents\Codex\2026-04-27\create-a-python-project-called-quant\quant_step1\backtesting\output\growth_signal_ticker_insights.csv
+Wrote C:\Users\SAMSUNG\Documents\Codex\2026-04-27\create-a-python-project-called-quant\quant_step1\backtesting\output\growth_signal_ticker_insights.xlsx
+Signals interpreted: 5
+Tickers interpreted: 7
+Done. Interpretation is historical research only, not investment advice.
+Downloading history for ACHR...
+Downloading history for ASTS...
+Downloading history for JOBY...
+Downloading history for LUNR...
+Downloading history for PL...
+Downloading history for RKLB...
+Downloading history for SPCE...
+Downloading benchmark history for SPY...
+Downloading benchmark history for QQQ...
+Wrote C:\Users\SAMSUNG\Documents\Codex\2026-04-27\create-a-python-project-called-quant\quant_step1\backtesting\output\growth_signal_enhanced_backtest_trades.csv
+Wrote C:\Users\SAMSUNG\Documents\Codex\2026-04-27\create-a-python-project-called-quant\quant_step1\backtesting\output\growth_signal_enhanced_backtest_summary.csv
+Wrote C:\Users\SAMSUNG\Documents\Codex\2026-04-27\create-a-python-project-called-quant\quant_step1\backtesting\output\growth_signal_enhanced_backtest_by_ticker.csv
+Wrote C:\Users\SAMSUNG\Documents\Codex\2026-04-27\create-a-python-project-called-quant\quant_step1\backtesting\output\growth_signal_enhanced_backtest_trades.xlsx
+Wrote C:\Users\SAMSUNG\Documents\Codex\2026-04-27\create-a-python-project-called-quant\quant_step1\backtesting\output\growth_signal_enhanced_backtest_summary.xlsx
+Wrote C:\Users\SAMSUNG\Documents\Codex\2026-04-27\create-a-python-project-called-quant\quant_step1\backtesting\output\growth_signal_enhanced_backtest_by_ticker.xlsx
+Wrote C:\Users\SAMSUNG\Documents\Codex\2026-04-27\create-a-python-project-called-quant\quant_step1\backtesting\output\growth_signal_enhanced_backtest_report.xlsx
+Enhanced events: 255
+Done. Enhanced backtest results are historical research only, not predictions.
+Wrote C:\Users\SAMSUNG\Documents\Codex\2026-04-27\create-a-python-project-called-quant\quant_step1\output\daily_growth_priority.csv
+Wrote C:\Users\SAMSUNG\Documents\Codex\2026-04-27\create-a-python-project-called-quant\quant_step1\output\daily_growth_priority.xlsx
+Wrote C:\Users\SAMSUNG\Documents\Codex\2026-04-27\create-a-python-project-called-quant\quant_step1\output\daily_growth_priority_report.xlsx
+Wrote C:\Users\SAMSUNG\Documents\Codex\2026-04-27\create-a-python-project-called-quant\quant_step1\output\final_daily_research_report.xlsx
+Ranked tickers: 7
+Done. Ranking is for research prioritization only, not investment advice.
+Wrote C:\Users\SAMSUNG\Documents\Codex\2026-04-27\create-a-python-project-called-quant\quant_step1\output\growth_risk_score.csv
+Wrote C:\Users\SAMSUNG\Documents\Codex\2026-04-27\create-a-python-project-called-quant\quant_step1\output\growth_risk_score.xlsx
+Updated C:\Users\SAMSUNG\Documents\Codex\2026-04-27\create-a-python-project-called-quant\quant_step1\output\final_daily_research_report.xlsx with Risk_Score sheet
+Scored tickers: 7
+Done. Risk scores are research context only, not investment advice.
+Wrote C:\Users\SAMSUNG\Documents\Codex\2026-04-27\create-a-python-project-called-quant\quant_step1\output\long_term_growth_quality.csv
+Wrote C:\Users\SAMSUNG\Documents\Codex\2026-04-27\create-a-python-project-called-quant\quant_step1\output\long_term_growth_quality.xlsx
+Updated C:\Users\SAMSUNG\Documents\Codex\2026-04-27\create-a-python-project-called-quant\quant_step1\output\final_daily_research_report.xlsx with Long_Term_Quality sheet
+Scored tickers: 7
+Done. Long-term quality scores are research context only, not investment advice.
+Checking event risk for LUNR...
+Checking event risk for RKLB...
+Checking event risk for ASTS...
+Checking event risk for PL...
+Checking event risk for SPCE...
+Checking event risk for ACHR...
+Checking event risk for JOBY...
+Wrote C:\Users\SAMSUNG\Documents\Codex\2026-04-27\create-a-python-project-called-quant\quant_step1\output\growth_event_risk.csv
+Wrote C:\Users\SAMSUNG\Documents\Codex\2026-04-27\create-a-python-project-called-quant\quant_step1\output\growth_event_risk.xlsx
+Updated C:\Users\SAMSUNG\Documents\Codex\2026-04-27\create-a-python-project-called-quant\quant_step1\output\final_daily_research_report.xlsx with Event_Risk_Check sheet
+Checked tickers: 7
+Done. Event risk is research context only, not investment advice.
+Starting quant_step1 daily report pipeline.
+This is a research workflow only. It does not place trades.
+
+=== Current screener ===
+
+=== Signal backtest ===
+
+=== Backtest interpretation ===
+
+=== Enhanced backtest ===
+
+=== Daily priority ranking ===
+
+=== Growth risk score ===
+
+=== Long-term quality score ===
+
+=== Event risk check ===
+
+Wrote final report with Executive_Summary: C:\Users\SAMSUNG\Documents\Codex\2026-04-27\create-a-python-project-called-quant\quant_step1\output\final_daily_research_report.xlsx
+Done. Open output/final_daily_research_report.xlsx first.
+ExitCode=0 
+ 

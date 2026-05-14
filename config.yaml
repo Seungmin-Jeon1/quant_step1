@@ -1,0 +1,23 @@
+growth_tickers:
+  - LUNR
+  - RKLB
+  - ASTS
+  - PL
+  - SPCE
+  - ACHR
+  - JOBY
+
+mega_cap_tickers:
+  - NVDA
+  - TSLA
+  - GOOG
+  - AAPL
+
+screening:
+  price_history_period: 1y
+  output_dir: output
+
+backtest:
+  history_period: 2y
+  cooldown_days: 10
+  output_dir: output
