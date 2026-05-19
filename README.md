@@ -1,291 +1,136 @@
 # quant_step1
 
-`quant_step1` is organized into project stages.
+`quant_step1` is a first-version US stock screening tool for two ticker groups:
 
-## Current Folders
+- Growth / Space rebound candidates: `LUNR`, `RKLB`, `ASTS`, `PL`, `SPCE`, `ACHR`, `JOBY`
+- Mega-cap valuation screen: `NVDA`, `TSLA`, `GOOG`, `AAPL`
 
-- `screening/`: Current US stock screening tool using `yfinance`.
-- `backtesting/`: First-version Growth / Space signal backtest.
-- `signal_rules.py`: Shared Growth / Space signal, warning, risk, and action-note rules.
+The script uses `yfinance` for price, volume, and basic fundamental data. It does not connect to any brokerage account and does not place trades.
 
-This project does not connect to a brokerage account, does not place trades, and does not predict future stock prices.
-
-## Daily One-Command Run
-
-For normal daily use, run the full pipeline from the project root:
+## Setup
 
 ```powershell
-py .\run_all_reports.py
+cd quant_step1
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+pip install -r requirements.txt
 ```
 
-This runs the screener, backtest, backtest interpretation, enhanced backtest, priority ranking, risk score, long-term quality score, and event risk check in order. It then rebuilds:
-
-```text
-output/final_daily_research_report.xlsx
-```
-
-The final report starts with an `Executive_Summary` sheet, followed by the detailed sheets:
-
-- `Final_Daily_Priority`
-- `Risk_Score`
-- `Long_Term_Quality`
-- `Event_Risk_Check`
-- `Enhanced_Backtest_By_Signal`
-- `Signal_Interpretation`
-
-This one-command run is still a research workflow only. It does not connect to a brokerage account, does not place trades, and does not provide investment advice.
-
-## Architecture
-
-- `screening/screen_stocks.py` runs the current-day screener.
-- `backtesting/backtest_growth.py` runs historical Growth / Space signal backtests.
-- `signal_rules.py` contains the shared Growth / Space technical signal rules.
-- `config.yaml` contains ticker lists, screening history period, backtest period, cooldown, and output folder settings.
-
-Both the screener and the backtest import the same Growth / Space signal logic from `signal_rules.py`. This keeps live screening signals and historical backtest signals from drifting apart.
-
-## Strategy Role
-
-`strategy_role` is not a trading command. It explains how each Growth / Space signal should be treated in the research workflow:
-
-- `Pullback Watch` -> `Primary Watch Signal`
-- `Trend Positive` -> `Trend Filter`
-- `High Volume Risk Monitor` -> `Volatility Monitor / Confirmation Required`
-- `Weak Trend / Low Volume` -> `Reversal Monitor`
-- `Early Watch` -> `Early Alert Only`
-- `Confirmed Watch` -> `Rebound Confirmation Signal`
-- `Neutral` -> `No Clear Setup`
-- `Data Issue` -> `Data Quality Review`
-- `Error` -> `Error / Review Required`
-
-## Configuration
-
-Edit `config.yaml` to reuse the project with another ticker group without changing Python code.
-
-```yaml
-growth_tickers:
-  - LUNR
-  - RKLB
-  - ASTS
-
-mega_cap_tickers:
-  - NVDA
-  - TSLA
-
-screening:
-  price_history_period: 1y
-  output_dir: output
-
-backtest:
-  history_period: 2y
-  cooldown_days: 10
-  output_dir: output
-```
-
-The Growth / Space signal rules can be reused for other high-growth watchlists, but financial interpretation may need industry-specific adjustments.
-
-## Screening
-
-Run the current screener from the project root:
+## Run
 
 ```powershell
-py .\screening\screen_stocks.py
+python .\screening\screen_stocks.py
 ```
 
-Or from the `screening` folder:
+The script writes:
 
-```powershell
-cd .\screening
-py screen_stocks.py
-```
-
-Screening outputs are written to:
-
-```text
-screening/output/
-```
-
-See `screening/README.md` for the detailed screening documentation.
-
-## Backtesting
-
-The first backtest applies only to the Growth / Space tickers:
-
-```text
-LUNR, RKLB, ASTS, PL, SPCE, ACHR, JOBY
-```
-
-It replays historical daily data from `yfinance`, assigns the same technical signal types used by the screener, and measures 5, 20, and 60 trading day forward returns after each signal event.
-
-Run it from the project root:
-
-```powershell
-py .\backtesting\backtest_growth.py
-```
-
-Or from the `backtesting` folder:
-
-```powershell
-cd .\backtesting
-py backtest_growth.py
-```
-
-Backtesting outputs are written to:
-
-```text
-backtesting/output/
-```
-
-Output files:
-
-- `growth_signal_backtest_trades.csv`
-- `growth_signal_backtest_summary.csv`
-- `growth_signal_backtest_by_ticker.csv`
-- `growth_signal_backtest_trades.xlsx`
-- `growth_signal_backtest_summary.xlsx`
-- `growth_signal_backtest_by_ticker.xlsx`
-- `growth_signal_backtest_report.xlsx`
+- `screening/output/growth_rebound_screen.csv`
+- `screening/output/mega_cap_valuation_screen.csv`
+- `screening/output/growth_rebound_screen.xlsx`
+- `screening/output/mega_cap_valuation_screen.xlsx`
+- `screening/output/quant_step1_report.xlsx`
 
 The combined workbook includes:
 
-- `Trades`
-- `Summary_By_Signal`
-- `Summary_By_Ticker`
+- `Growth_Rebound`
+- `Mega_Cap_Valuation`
 
-The backtest uses a 10-trading-day cooldown for the same ticker and same signal so one continuous signal regime is not counted every day.
+## Metrics
 
-The former `Avoid` signal was renamed to `Weak Trend / Low Volume` after backtesting showed it did not behave like a pure avoid signal in the Growth / Space universe. The condition is unchanged: price is below the 200-day moving average and current volume is below the 20-day average. The new label describes a weak-trend, low-participation state, not an automatic sell or avoid instruction. This is a useful reminder that signal labels should be validated by backtesting.
+For each ticker, the script calculates:
 
-Limitations:
+- Last close price
+- RSI 14
+- 20-day average volume
+- Volume ratio versus 20-day average
+- 20-day return
+- 60-day return
+- 50-day moving average
+- 200-day moving average
+- Whether price is above or below the 50-day and 200-day moving averages
 
-- It does not account for transaction costs, slippage, taxes, bid-ask spreads, liquidity constraints, or survivorship bias.
-- It does not backtest the mega-cap valuation screen yet.
-- It does not prove future profitability.
-- It is for research only and is not investment advice.
+Where available from `yfinance`, it also collects:
 
-## Backtest Interpretation
+- Market cap
+- Revenue
+- Revenue growth
+- Net income
+- Operating cash flow
+- Free cash flow
+- Total cash
+- Total debt
+- Trailing PE
+- Price to sales
+- Price to book
+- Profit margin
+- Operating margin
 
-`backtesting/analyze_backtest.py` reads existing backtest output files and creates signal-level and ticker-level interpretation reports. It does not rerun the backtest and does not call `yfinance`.
+## Signal Logic
 
-Run it after `backtest_growth.py`:
+### Growth / Space screen
 
-```powershell
-py .\backtesting\analyze_backtest.py
-```
+- `Confirmed Watch`: RSI is below 35, volume ratio is above 1.5, and price is above or close to the 50-day moving average.
+- `Early Watch`: RSI is below 35 and volume ratio is above 1.5, but price is not yet above or close to the 50-day moving average.
+- `Trend Positive`: Price is above both the 50-day and 200-day moving averages, with RSI between 40 and 70.
+- `Pullback Watch`: Price is below the 50-day moving average but above the 200-day moving average, with RSI between 35 and 50.
+- `High Volume Risk Monitor`: Price is below both the 50-day and 200-day moving averages while volume ratio is above 1.5.
+- `Weak Trend / Low Volume`: Price is below the 200-day moving average and current volume is below the 20-day average.
+- `Data Issue`: Important financial data is missing from `yfinance`, so the ticker should be reviewed manually.
+- `Neutral`: Anything else.
 
-It rates signal effectiveness using event count, average forward returns, win rates, and drawdowns. These ratings are historical research summaries only. They do not prove future profitability and do not include transaction costs, slippage, taxes, liquidity constraints, or survivorship bias.
+The CSV includes `signal_reason` so missing data can be separated from confirmed risk conditions.
 
-Interpretation outputs are written to `backtesting/output/`:
+`Weak Trend / Low Volume` replaced the older `Avoid` label because backtesting showed the condition did not behave like a pure avoid signal. It is a weak-trend condition, not an automatic sell or avoid instruction.
 
-- `growth_signal_backtest_interpretation.csv`
-- `growth_signal_backtest_interpretation.xlsx`
-- `growth_signal_backtest_scorecard.xlsx`
-- `growth_signal_ticker_insights.csv`
-- `growth_signal_ticker_insights.xlsx`
+The output also includes `financial_warning` for unusual fundamental values such as extreme revenue growth, extreme price-to-sales ratios, or negative price-to-book values. These warnings are data quality and interpretation flags, not trade signals.
 
-## Enhanced Backtest
+The output also includes:
 
-`backtesting/enhance_backtest_growth.py` extends the Growth / Space backtest with more practical research metrics. It reads the existing backtest trades file, downloads ticker and benchmark history, and adds:
+- `technical_warning`: Technical interpretation flags such as overbought conditions, short-term extension, weak volume, below-trend risk, or high-volume trading below key moving averages.
+- `risk_level`: A simple Growth / Space risk label derived from the signal. Growth names are not marked Low risk because early-stage and high-growth equities can remain volatile even when trend conditions are positive.
+- `action_note`: A watchlist note for interpretation. These notes are not buy or sell recommendations.
 
-- 10 trading day forward return
-- SPY and QQQ benchmark returns
-- excess returns versus SPY and QQQ
-- transaction cost and slippage assumptions
-- net returns after cost
-- stop-loss and take-profit hit checks
-- average gain, average loss, and payoff ratio summaries
+### Mega-cap valuation screen
 
-Run it after `backtest_growth.py`:
+The mega-cap valuation screen is profile-adjusted by ticker. It uses different valuation thresholds for `NVDA`, `TSLA`, `GOOG`, and `AAPL` instead of applying one generic PER/PSR/PBR rule to all of them.
 
-```powershell
-py .\backtesting\enhance_backtest_growth.py
-```
+The output includes:
 
-Enhanced backtest outputs are written to `backtesting/output/`:
+- `valuation_profile`
+- `valuation_status`
+- `valuation_reason`
+- `quality_score`
+- `valuation_risk_score`
+- `debt_to_cash`
 
-- `growth_signal_enhanced_backtest_trades.csv`
-- `growth_signal_enhanced_backtest_summary.csv`
-- `growth_signal_enhanced_backtest_by_ticker.csv`
-- `growth_signal_enhanced_backtest_trades.xlsx`
-- `growth_signal_enhanced_backtest_summary.xlsx`
-- `growth_signal_enhanced_backtest_by_ticker.xlsx`
-- `growth_signal_enhanced_backtest_report.xlsx`
+The valuation status is a scenario indicator only:
 
-The default assumptions are 0.10% round-trip transaction cost, 0.20% round-trip slippage, -8% stop-loss threshold, and +20% take-profit threshold. These are research assumptions only, not trading instructions.
+- `High Quality / Reasonable vs Profile`
+- `Fair / Watch Valuation`
+- `Expensive / Needs Growth Justification`
+- `High Quality / Premium`
+- `Insufficient Data`
 
-## Daily Priority Ranking
+This tool does not predict future stock prices. It is only a screening aid for comparing valuation scenarios. It intentionally avoids using `Cheap` too aggressively for mega-cap technology stocks.
 
-`rank_screening_results.py` combines the current Growth / Space screening output with the historical backtest interpretation output. When enhanced backtest output is available, it also incorporates net returns after cost, SPY/QQQ excess returns, payoff ratio, stop-loss hit rate, and take-profit hit rate.
+The mega-cap output also includes:
 
-Run it after the screener and backtest interpretation are up to date:
+- `technical_warning`: Technical flags such as overbought conditions, short-term extension, below-trend risk, weak-volume uptrends, and AAPL-specific high P/B context.
+- `interpretation_note`: A ticker-specific scenario note that should be read together with valuation profile, quality score, valuation risk score, and technical trend.
 
-```powershell
-py .\rank_screening_results.py
-```
+## Next Step: Backtesting
 
-This ranking is not a buy or sell signal. It is a research prioritization layer that helps decide which tickers deserve closer review. It does not include taxes, liquidity constraints, future news, or survivorship bias, and it does not prove future profitability. The enhanced stop-loss and take-profit fields are event flags within the period, not a full first-hit trade execution simulation.
+Full backtesting is not implemented yet. The next phase should test forward returns after growth signals:
 
-Daily ranking outputs are written to project-level `output/`:
+- 5 trading day return after `Early Watch`
+- 20 trading day return after `Early Watch`
+- 60 trading day return after `Early Watch`
+- 5 trading day return after `Confirmed Watch`
+- 20 trading day return after `Confirmed Watch`
+- 60 trading day return after `Confirmed Watch`
 
-- `daily_growth_priority.csv`
-- `daily_growth_priority.xlsx`
-- `daily_growth_priority_report.xlsx`
-- `final_daily_research_report.xlsx`
+## Notes
 
-For normal daily review, open `output/final_daily_research_report.xlsx` first. It is the compact final report.
+`yfinance` data availability varies by ticker and over time. If one ticker fails, the script logs the error, continues with the remaining tickers, and includes an error message in the output row for the failed ticker.
 
-## Growth Risk Score
-
-`risk/risk_score_growth.py` creates a separate risk score for the current Growth / Space tickers. This keeps priority and risk separate:
-
-- `priority_score`: which tickers deserve review first
-- `overall_risk_score`: how cautious the review should be
-
-Run it after `rank_screening_results.py`:
-
-```powershell
-py .\risk\risk_score_growth.py
-```
-
-Risk outputs are written to project-level `output/`:
-
-- `growth_risk_score.csv`
-- `growth_risk_score.xlsx`
-
-The script also updates `output/final_daily_research_report.xlsx` with a `Risk_Score` sheet. The risk score combines volatility, liquidity, financial, valuation, and technical risk. It is research context only, not a position-size recommendation or investment advice.
-
-## Long-Term Quality Score
-
-`long_term_quality_score.py` creates a separate long-term quality score for the current Growth / Space tickers. This keeps short-term priority, risk, and long-term business quality separate.
-
-Run it after `risk_score_growth.py`:
-
-```powershell
-py .\long_term_quality_score.py
-```
-
-Quality outputs are written to project-level `output/`:
-
-- `long_term_growth_quality.csv`
-- `long_term_growth_quality.xlsx`
-
-The script also updates `output/final_daily_research_report.xlsx` with a `Long_Term_Quality` sheet. The score uses available `yfinance` fundamentals from the screener, including revenue growth, profitability, cash runway, debt risk, valuation risk, free cash flow, dilution risk, and business quality. It is research context only and should be manually reviewed, especially for early-stage companies where reported fundamentals can be distorted.
-
-## Event Risk Check
-
-`event_risk_checker.py` checks recent `yfinance` news and available calendar data for the current Growth / Space tickers. It is designed to flag whether recent price action may be tied to news, financing risk, launch or mission events, earnings, contracts, partnerships, analyst actions, or other catalysts.
-
-Run it after the daily priority, risk, and long-term quality files are up to date:
-
-```powershell
-py .\event_risk_checker.py
-```
-
-Event risk outputs are written to project-level `output/`:
-
-- `growth_event_risk.csv`
-- `growth_event_risk.xlsx`
-
-The script also updates `output/final_daily_research_report.xlsx` with an `Event_Risk_Check` sheet.
-
-The event risk check is not a news-based buy or sell signal. It is a manual-review layer that helps identify whether a ticker needs extra context before interpreting the technical, risk, or quality scores. It depends on available `yfinance` news data, so missing or sparse news should be treated as data limitation, not as proof that no relevant event exists.
+This tool does not provide investment advice. It does not connect to a brokerage account, does not place trades, and does not predict future stock prices.
